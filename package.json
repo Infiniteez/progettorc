@@ -1,9 +1,9 @@
 {
-  "name": "docker-nginx-express",
+  "name": "progettorc",
   "version": "1.0.0",
-  "description": "A playground for Docker with Nginx and Express.",
-  "author": "Roberto Achar <robertoachar@gmail.com>",
-  "homepage": "https://github.com/robertoachar/docker-nginx-express#readme",
+  "description": "Progetto per l'esame di Reti di Calcolatori",
+  "author": "Andrea Macaro e Gianluca Gambilonghi",
+  "homepage": "https://github.com/infiniteez/progettorc#readme",
   "keywords": [
     "docker",
     "docker-compose",
@@ -14,20 +14,20 @@
     "round-robin",
     "live-reload"
   ],
-  "main": "src/index.js",
+  "main": "app/src/index.js",
   "files": [
-    "src"
+    "app/src"
   ],
   "scripts": {
-    "lint": "eslint src/**/*.js",
-    "start": "nodemon src/index.js"
+    "lint": "eslint app/src/**/*.js",
+    "start": "nodemon app/src/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/robertoachar/docker-nginx-express.git"
+    "url": "https://github.com/infiniteez/progettorc.git"
   },
   "bugs": {
-    "url": "https://github.com/robertoachar/docker-nginx-express/issues"
+    "url": "https://github.com/infiniteez/progettorc/issues"
   },
   "dependencies": {
     "express": "4.16.2",
