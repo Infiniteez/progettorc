@@ -4,8 +4,8 @@ services:
 
   nginx:
     build:
-      context: .
-      dockerfile: .docker/nginx.dockerfile
+      context: .docker
+      dockerfile: nginx.dockerfile
     links:
       - node1:node1
       - node2:node2
@@ -21,8 +21,8 @@ services:
 
   node1:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .docker
+      dockerfile: node.dockerfile
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
@@ -36,8 +36,8 @@ services:
 
   node2:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .docker
+      dockerfile: node.dockerfile
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
@@ -51,8 +51,8 @@ services:
 
   node3:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: .docker
+      dockerfile: node.dockerfile
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
@@ -66,8 +66,8 @@ services:
 
   couchdb:
     build:
-      context: couchdb
-      dockerfile: Dockerfile
+      context: .docker
+      dockerfile: couchdb.dockerfile
     working_dir: /usr/src/db
     volumes:
       - ./couchdb:/usr/src/db
