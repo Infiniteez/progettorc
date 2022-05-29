@@ -1,31 +1,25 @@
-version: '2'
-
 services:
 
-  nginx:
+  webserver:
     build:
-      context: .docker
-      dockerfile: nginx.dockerfile
-    links:
-      - node1:node1
-      - node2:node2
-      - node3:node3
+      context: webserver
+      dockerfile: Dockerfile
     depends_on:
       - node1
       - node2
       - node3
     ports:
-      - "8080:80"
+      - "8888:80"
     networks:
       - app-network
 
   node1:
     build:
-      context: .docker
-      dockerfile: node.dockerfile
+      context: app
+      dockerfile: Dockerfile
     working_dir: /usr/src/app
     volumes:
-      - .:/usr/src/app
+      - ./app:/usr/src/app/
     ports:
       - "3000"
     environment:
@@ -36,11 +30,11 @@ services:
 
   node2:
     build:
-      context: .docker
-      dockerfile: node.dockerfile
+      context: app
+      dockerfile: Dockerfile
     working_dir: /usr/src/app
     volumes:
-      - .:/usr/src/app
+      - ./app:/usr/src/app/
     ports:
       - "3000"
     environment:
@@ -51,11 +45,11 @@ services:
 
   node3:
     build:
-      context: .docker
-      dockerfile: node.dockerfile
+      context: app
+      dockerfile: Dockerfile
     working_dir: /usr/src/app
     volumes:
-      - .:/usr/src/app
+      - ./app:/usr/src/app/
     ports:
       - "3000"
     environment:
@@ -64,13 +58,13 @@ services:
       - app-network
       - db-network
 
-  couchdb:
+  database:
     build:
-      context: .docker
-      dockerfile: couchdb.dockerfile
+      context: database
+      dockerfile: Dockerfile
     working_dir: /usr/src/db
     volumes:
-      - ./couchdb:/usr/src/db
+      - ./database:/usr/src/database/
     ports:
       - "5984:5984"
     environment:
