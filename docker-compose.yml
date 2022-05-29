@@ -1,5 +1,4 @@
 services:
-
   webserver:
     build:
       context: webserver
@@ -72,6 +71,7 @@ services:
       - COUCHDB_PASSWORD=admin
     networks:
       - db-network
+
 networks:
   app-network:
     driver: bridge
