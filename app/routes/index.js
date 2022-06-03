@@ -123,21 +123,49 @@ function msToHHMMSS(ms) {
 /* CAP --> Coordinate */
 
 router.post("/getCoordinates", function (req, res){
-	console.log("SOno uqui"); 
+
 	partenza = req.body.partenza; 
-	console.log("Ciaooo"); 
-	console.log(partenza); 
 	destinazione = req.body.destinazione; 
 
-	let request = {
-		url: "http://api.zippopotam.us/it/" + partenza, 
+	let options1 = { // richiesta coordinate partenza
+		url: "http://api.zippopotam.us/it/" + partenza,
 		json: true
 	};
-	request.get(request, function (error, response, body) {
-		if (!error && response.statusCode === 200) { // richiesta andata a buon fine
-			console.log(response);  
+	let options2 = { // richiesta coordinate destinazione
+		url: "http://api.zippopotam.us/it/" + destinazione,
+		json: true
+	};
+
+	request.get(options1, function (error1, response1, body1) {
+		if (!error1 && response1.statusCode === 200) { // richiesta andata a buon fine
+			console.log(response1); 
+			var long1 = response1.body.places[0].longitude;
+			var lat1 = response1.body.places[0].latitude; 
+
+			// richiesta coordinate di destinazione
+			request.get(options2, function (error2, response2, body2) {
+				if (!error2 && response2.statusCode === 200) { // richiesta andata a buon fine
+					console.log(response2); 
+					var long2 = response2.body.places[0].longitude;
+					var lat2 = response2.body.places[0].latitude; 
+
+					res.render('coordinates', { // invio al browser la risposta
+						long1:long1, 
+						lat1: lat1, 
+						long2: long2,
+						lat2: lat2
+					});
+				}
+				else{
+					res.render("index"); 
+				}
+			});
 		}
-	});
+		else{
+			res.render("index"); 
+		}
+	}); 
+
 
 }); 
 
