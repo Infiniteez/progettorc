@@ -14,4 +14,18 @@ block content
 		p refresh_token:
 			pre #{user.refresh_token}
 		p La tua email è #{user.email}
-		a(href="/account" class="btn btn-spotify") Ottieni 
+		a(href="/account" class="btn btn-spotify") Ottieni
+	hr
+	h2 Inserisci il codice postale
+	div(class="")
+		form(action='../getCoordinates', method="POST")
+			label(for="partenza") Partenza
+			input(type='text', name='partenza')
+			br
+			label(for="destinazione") Destinazione
+			input(type="text", name='destinazione')
+			br
+			input(type="submit")
+		
+
+	

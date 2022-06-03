@@ -6,10 +6,11 @@ const authRouter = require('./routes/auth'),
 	indexRouter = require('./routes/index'),
 	express = require('express'),
 	passport = require('passport'),
-	path = require('path');
+	path = require('path'),
+	bodyParser = require('body-parser');
 
 
-const app = express();
+const app = express(); // 
 
 
 app.set('views', path.join(__dirname, 'views'))
@@ -22,6 +23,8 @@ app.set('views', path.join(__dirname, 'views'))
 	.use(passport.initialize())
 	.use(passport.session())
 	.use('/', indexRouter)
-	.use('/', authRouter);
+	.use('/', authRouter)
+	.use(bodyParser.urlencoded({extended:false}))
+	.use(bodyParser.json());
 
 app.listen(process.env.PORT || DEFAULT_PORT);
