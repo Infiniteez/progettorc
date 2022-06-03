@@ -1,6 +1,13 @@
 extends layout
 
 block content
-	p ID: #{user.id}
-	p Profilo: 
-		a(href=user.profileUrl) #{user.profileUrl}
+	h1 Ecco i tuoi 3 artisti top
+	h3=names
+	hr
+	hr
+	h1 Ecco una lista di 100 tracce basata sui tuoi artisti top
+	each val in tracks
+		li #{val.name}
+		audio(controls)
+			source(src=val.preview_url type="audio/mpeg")
+		hr

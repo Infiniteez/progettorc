@@ -8,7 +8,10 @@ block content
 			i.bi.bi-spotify
 			|  Login con Spotify
 	else
-		h2 Ciao, #{user.username}
-		p La tua email è #{user.emails[0].value}
-		a(href="/account" class="btn btn-spotify") Info account
-	h2 ciao
+		h2 Ciao, #{user.spotify_id}
+		p access_token:
+			pre #{user.access_token}
+		p refresh_token:
+			pre #{user.refresh_token}
+		p La tua email è #{user.email}
+		a(href="/account" class="btn btn-spotify") Ottieni 

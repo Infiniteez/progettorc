@@ -1,79 +1,79 @@
 services:
-  webserver:
-    build:
-      context: webserver
-      dockerfile: Dockerfile
-    depends_on:
-      - node1
-      - node2
-      - node3
-    ports:
-      - "8888:80"
-    networks:
-      - app-network
+    # webserver:
+    #     build:
+    #         context: webserver
+    #         dockerfile: Dockerfile
+    #     depends_on:
+    #         - node1
+    #         - node2
+    #         - node3
+    #     ports:
+    #         - "8888:80"
+    #     networks:
+    #         - app-network
 
-  node1:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    working_dir: /usr/src/app
-    volumes:
-      - ./app:/usr/src/app/
-    ports:
-      - "3000"
-    environment:
-      - INSTANCE=node1
-    networks:
-      - app-network
-      - db-network
+    # node1:
+    #     build:
+    #         context: app
+    #         dockerfile: Dockerfile
+    #     working_dir: /usr/src/app
+    #     volumes:
+    #         - ./app:/usr/src/app/
+    #     ports:
+    #         - "8888:3000"
+    #     environment:
+    #         - INSTANCE=node1
+    #     networks:
+    #         - app-network
+    #         - db-network
 
-  node2:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    working_dir: /usr/src/app
-    volumes:
-      - ./app:/usr/src/app/
-    ports:
-      - "3000"
-    environment:
-      - INSTANCE=node2
-    networks:
-      - app-network
-      - db-network
+    # node2:
+    #     build:
+    #         context: app
+    #         dockerfile: Dockerfile
+    #     working_dir: /usr/src/app
+    #     volumes:
+    #         - ./app:/usr/src/app/
+    #     ports:
+    #         - "3000"
+    #     environment:
+    #         - INSTANCE=node2
+    #     networks:
+    #         - app-network
+    #         - db-network
 
-  node3:
-    build:
-      context: app
-      dockerfile: Dockerfile
-    working_dir: /usr/src/app
-    volumes:
-      - ./app:/usr/src/app/
-    ports:
-      - "3000"
-    environment:
-      - INSTANCE=node3
-    networks:
-      - app-network
-      - db-network
+    # node3:
+    #     build:
+    #         context: app
+    #         dockerfile: Dockerfile
+    #     working_dir: /usr/src/app
+    #     volumes:
+    #         - ./app:/usr/src/app/
+    #     ports:
+    #         - "3000"
+    #     environment:
+    #         - INSTANCE=node3
+    #     networks:
+    #         - app-network
+    #         - db-network
 
-  database:
-    build:
-      context: database
-      dockerfile: Dockerfile
-    working_dir: /usr/src/db
-    volumes:
-      - ./database:/usr/src/database/
-    ports:
-      - "5984:5984"
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=admin
-    networks:
-      - db-network
+    database:
+        build:
+            context: database
+            dockerfile: Dockerfile
+        working_dir: /usr/src/db
+        volumes:
+            - ./database:/usr/src/database/
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=admin
+            - MONGO_INITDB_ROOT_PASSWORD=admin
+        networks:
+            - db-network
 
 networks:
-  app-network:
-    driver: bridge
-  db-network:
-    driver: bridge
+    # app-network:
+    #     driver: bridge
+    db-network:
+        driver: bridge

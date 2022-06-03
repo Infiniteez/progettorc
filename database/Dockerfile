@@ -1,7 +1,7 @@
-FROM couchdb:latest
+FROM mongo:5
 
 WORKDIR /usr/src/db
 
 VOLUME [ "/usr/src/db" ]
 
-EXPOSE 5984
+EXPOSE 27017

@@ -8,8 +8,8 @@ RUN npm install -g nodemon --quiet
 RUN npm install --quiet
 
 ENV NODE_ENV=development
-ENV PORT=3000
+ENV PORT=8888
 
-EXPOSE 3000
+EXPOSE 8888
 
-CMD [ "npm", "start" ]
+CMD [ "nodemon", "-L", "app.js" ]
