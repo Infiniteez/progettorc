@@ -123,8 +123,8 @@ function msToHHMMSS(ms) {
 /* CAP --> Coordinate */
 
 router.post('/getCoordinates', function (req, res) {
-	let partenza = req.body.partenza; 
-	let destinazione = req.body.destinazione; 
+	let partenza = req.body.partenza;
+	let destinazione = req.body.destinazione;
 
 	let options1 = { // richiesta coordinate partenza
 		url: 'http://api.zippopotam.us/it/' + partenza,
@@ -135,35 +135,35 @@ router.post('/getCoordinates', function (req, res) {
 		json: true
 	};
 
-	request.get(options1, function (error1, response1, body1) {
+	request.get(options1, function (error1, response1) {
 		if (!error1 && response1.statusCode === 200) { // richiesta andata a buon fine
-			console.log(response1); 
-			var long1 = response1.body.places[0].longitude;
-			var lat1 = response1.body.places[0].latitude; 
+			console.log(response1);
+			let long1 = response1.body.places[0].longitude;
+			let lat1 = response1.body.places[0].latitude;
 
 			// richiesta coordinate di destinazione
-			request.get(options2, function (error2, response2, body2) {
+			request.get(options2, function (error2, response2) {
 				if (!error2 && response2.statusCode === 200) { // richiesta andata a buon fine
-					console.log(response2); 
-					var long2 = response2.body.places[0].longitude;
-					var lat2 = response2.body.places[0].latitude; 
+					console.log(response2);
+					let long2 = response2.body.places[0].longitude;
+					let lat2 = response2.body.places[0].latitude;
 
 					res.render('coordinates', { // invio al browser la risposta
-						long1:long1, 
-						lat1: lat1, 
+						long1: long1,
+						lat1: lat1,
 						long2: long2,
 						lat2: lat2
 					});
 				}
-				else{
-					res.render('index'); 
+				else {
+					res.render('index');
 				}
 			});
 		}
 		else {
-			res.render('index'); 
+			res.render('index');
 		}
-	}); 
+	});
 });
 
 
