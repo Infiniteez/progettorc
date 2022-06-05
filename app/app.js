@@ -15,6 +15,8 @@ const app = express(); //
 
 app.set('views', path.join(__dirname, 'views'))
 	.set('view engine', 'pug')
+	.use(bodyParser.urlencoded({extended:false}))
+	.use(bodyParser.json())
 	.use(express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')))
 	.use('/css', express.static(path.join(__dirname, 'node_modules', 'bootstrap-icons', 'font')))
 	.use(express.static(path.join(__dirname, 'public')))
@@ -23,8 +25,6 @@ app.set('views', path.join(__dirname, 'views'))
 	.use(passport.initialize())
 	.use(passport.session())
 	.use('/', indexRouter)
-	.use('/', authRouter)
-	.use(bodyParser.urlencoded({extended:false}))
-	.use(bodyParser.json());
+	.use('/', authRouter);
 
 app.listen(process.env.PORT || DEFAULT_PORT);
