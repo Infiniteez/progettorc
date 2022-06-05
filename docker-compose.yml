@@ -1,46 +1,54 @@
 services:
-    # webserver:
-    #     build:
-    #         context: webserver
-    #         dockerfile: Dockerfile
-    #     depends_on:
-    #         - node1
-    #         - node2
-    #         - node3
-    #     ports:
-    #         - "8888:80"
-    #     networks:
-    #         - app-network
+    nginx:
+        image: nginx:1.21.6
+        volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - ./static:/var/www/html/static
+            - ./certs:/etc/nginx/certs
+        depends_on:
+            - node1
+            - node2
+            - node3
+        ports:
+            - "8888:80"
+            - "443:443"
+        restart: always
+        networks:
+            - app-network
 
-    # node1:
-    #     build:
-    #         context: app
-    #         dockerfile: Dockerfile
-    #     working_dir: /usr/src/app
-    #     volumes:
-    #         - ./app:/usr/src/app/
-    #     ports:
-    #         - "8888:3000"
-    #     environment:
-    #         - INSTANCE=node1
-    #     networks:
-    #         - app-network
-    #         - db-network
+    node1:
+        build:
+            context: app
+            dockerfile: Dockerfile
+        working_dir: /usr/src/app
+        volumes:
+            - ./app:/usr/src/app/
+        ports:
+            - "3000"
+        environment:
+            - INSTANCE=node1
+            - DB_NAME=mongodb
+            - PORT=3000
+        networks:
+            - app-network
+            - db-network
 
-    # node2:
-    #     build:
-    #         context: app
-    #         dockerfile: Dockerfile
-    #     working_dir: /usr/src/app
-    #     volumes:
-    #         - ./app:/usr/src/app/
-    #     ports:
-    #         - "3000"
-    #     environment:
-    #         - INSTANCE=node2
-    #     networks:
-    #         - app-network
-    #         - db-network
+    node2:
+        build:
+            context: app
+            dockerfile: Dockerfile
+        working_dir: /usr/src/app
+        volumes:
+            - ./app:/usr/src/app/
+        ports:
+            - "3000"
+        environment:
+            - INSTANCE=node2
+            - DB_NAME=mongodb
+            - PORT=3000
+        networks:
+            - app-network
+            - db-network
 
     # node3:
     #     build:
@@ -53,17 +61,15 @@ services:
     #         - "3000"
     #     environment:
     #         - INSTANCE=node3
+    #         - DB_NAME=mongodb
+    #         - PORT=3000
     #     networks:
     #         - app-network
     #         - db-network
 
-    database:
-        build:
-            context: database
-            dockerfile: Dockerfile
+    mongodb:
+        image: mongo:focal
         working_dir: /usr/src/db
-        volumes:
-            - ./database:/usr/src/database/
         ports:
             - "27017:27017"
         environment:
@@ -71,9 +77,10 @@ services:
             - MONGO_INITDB_ROOT_PASSWORD=admin
         networks:
             - db-network
+        command: mongod --quiet --logpath /dev/null
 
 networks:
-    # app-network:
-    #     driver: bridge
+    app-network:
+        driver: bridge
     db-network:
         driver: bridge

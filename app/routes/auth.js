@@ -13,13 +13,17 @@ const User = require('../models/User'),
 const router = express.Router();
 
 
-passport.serializeUser(function (user, done) {
-	done(null, user.spotify_id);
+passport.serializeUser((user, done) => {
+	done(null, user._id);
 });
 
-passport.deserializeUser(function (id, done) {
-	User.findOne({ 'spotify_id': id }, function (err, user) {
-		done(err, user);
+passport.deserializeUser((_id, done) => {
+	User.findById(_id, (err, user) => {
+		if (err) {
+			done(null, false, { error: err });
+		} else {
+			done(null, user);
+		}
 	});
 });
 
@@ -27,9 +31,12 @@ const strategy = new SpotifyStrategy(
 	{
 		clientID: process.env.CLIENT_ID,
 		clientSecret: process.env.CLIENT_SECRET,
-		callbackURL: process.env.REDIRECT_URI
+
+		// se la porta PORT è settata significa che siamo nel container quindi su nginx, quindi uso il REDIRECT_URI https
+		callbackURL: process.env.DB_NAME ? process.env.REDIRECT_URI : process.env.REDIRECT_URI_LOCAL
 	},
 	function (access_token, refresh_token, _expires_in, profile, done) {
+
 		User.findOne({ 'spotify_id': profile.id }, function (err, user) {
 			if (err) {
 				return done(err);
@@ -55,16 +62,15 @@ const strategy = new SpotifyStrategy(
 passport.use(strategy);
 refresh.use(strategy);
 
-router.get('/login', passport.authenticate('spotify', { scope: SPOTIFY_SCOPE }));
+router.get('/login', passport.authenticate('spotify', { scope: SPOTIFY_SCOPE, session: true }));
 
-router.get('/auth/callback', passport.authenticate('spotify', { failureRedirect: '/' }), function (req, res) {
+router.get('/auth/callback', passport.authenticate('spotify', { failureRedirect: '/', session: true }), function (req, res) {
 	let prevSession = req.session;
 	req.session.regenerate(() => {
 		Object.assign(req.session, prevSession);
 		res.redirect('/');
 	});
-}
-);
+});
 
 router.get('/logout', function (req, res, next) {
 	req.logout(function (err) {

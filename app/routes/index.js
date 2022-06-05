@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 		title: 'Docker with Nginx and Express',
 		node: NODE,
 		instance: INSTANCE,
-		user: req.user ? req.user : null
+		user: req.user
 	});
 });
 
@@ -122,17 +122,16 @@ function msToHHMMSS(ms) {
 /* ------------------------ CALCOLO DELLE COORDINATE --------------*/
 /* CAP --> Coordinate */
 
-router.post("/getCoordinates", function (req, res){
-
-	partenza = req.body.partenza; 
-	destinazione = req.body.destinazione; 
+router.post('/getCoordinates', function (req, res) {
+	let partenza = req.body.partenza; 
+	let destinazione = req.body.destinazione; 
 
 	let options1 = { // richiesta coordinate partenza
-		url: "http://api.zippopotam.us/it/" + partenza,
+		url: 'http://api.zippopotam.us/it/' + partenza,
 		json: true
 	};
 	let options2 = { // richiesta coordinate destinazione
-		url: "http://api.zippopotam.us/it/" + destinazione,
+		url: 'http://api.zippopotam.us/it/' + destinazione,
 		json: true
 	};
 
@@ -157,17 +156,15 @@ router.post("/getCoordinates", function (req, res){
 					});
 				}
 				else{
-					res.render("index"); 
+					res.render('index'); 
 				}
 			});
 		}
-		else{
-			res.render("index"); 
+		else {
+			res.render('index'); 
 		}
 	}); 
-
-
-}); 
+});
 
 
 
