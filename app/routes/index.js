@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 		title: 'Docker with Nginx and Express',
 		node: NODE,
 		instance: INSTANCE,
-		user: req.user ? req.user : null
+		user: req.user
 	});
 });
 
@@ -123,23 +123,23 @@ function msToHHMMSS(ms) {
 /* CAP --> Coordinate */
 
 router.post("/getCoordinates", function (req, res){
-	console.log("SOno uqui"); 
-	partenza = req.body.partenza; 
-	console.log("Ciaooo"); 
-	console.log(partenza); 
-	destinazione = req.body.destinazione; 
+	console.log("SOno uqui");
+	partenza = req.body.partenza;
+	console.log("Ciaooo");
+	console.log(partenza);
+	destinazione = req.body.destinazione;
 
 	let request = {
-		url: "http://api.zippopotam.us/it/" + partenza, 
+		url: "http://api.zippopotam.us/it/" + partenza,
 		json: true
 	};
 	request.get(request, function (error, response, body) {
 		if (!error && response.statusCode === 200) { // richiesta andata a buon fine
-			console.log(response);  
+			console.log(response);
 		}
 	});
 
-}); 
+});
 
 
 
