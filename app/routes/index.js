@@ -7,11 +7,9 @@ const ensureAuthenticated = require('./auth').ensureAuthenticated,
 const router = express.Router();
 
 router.get('/', (req, res) => {
-	const NODE = process.env.NODE_ENV || 'dev-local';
 	const INSTANCE = process.env.INSTANCE || 'node';
 	res.render('index', {
 		title: 'Docker with Nginx and Express',
-		node: NODE,
 		instance: INSTANCE,
 		user: req.user
 	});
@@ -24,7 +22,15 @@ router.get('/refresh_token', ensureAuthenticated, function (req, res) {
 
 });
 
+router.get('/test', function (req, res) {
+	res.status(200).json('Funziona');
+});
+
 /* account */
+/**
+ * @api {get} /user/:id Get user info
+ * @apiParam id Users unique ID
+ */
 router.get('/account', ensureAuthenticated, function (req, res) {
 	make_get_request(
 		'https://api.spotify.com/v1/me/top/artists?' +

@@ -12,8 +12,21 @@ const authRouter = require('./routes/auth'),
 	path = require('path'),
 	sessionstore = require('sessionstore');
 
+const http = require('http');
+const WebSocket = require('ws');
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
 
+wss.on('connection', function connection(ws) {
+	ws.on('message', function incoming(data) {
+		wss.clients.forEach(function each(client) {
+			if (client !== ws && client.readyState === WebSocket.OPEN) {
+				client.send(data);
+			}
+		});
+	});
+});
 app.disable('x-powered-by');
 app.enable('trust proxy');
 app.set('views', path.join(__dirname, 'views'));
@@ -37,4 +50,12 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/', authRouter);
 
-app.listen(process.env.PORT || DEFAULT_PORT);
+app.get('/chat', function (req, res) {
+	res.sendFile(__dirname + '/index.html');
+});
+
+if (process.env.NODE_ENV === 'test') {
+	module.exports = app;
+} else {
+	server.listen(process.env.PORT || DEFAULT_PORT);
+}

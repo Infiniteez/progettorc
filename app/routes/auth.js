@@ -1,4 +1,4 @@
-const SPOTIFY_SCOPE = ['user-read-private', 'user-read-email', 'user-read-playback-state', 'user-top-read'];
+const SPOTIFY_SCOPE = ['user-read-private', 'user-read-email', 'user-top-read'];
 
 require('dotenv').config();
 require('../config/database');
@@ -36,8 +36,9 @@ const strategy = new SpotifyStrategy(
 		callbackURL: process.env.DB_NAME ? process.env.REDIRECT_URI : process.env.REDIRECT_URI_LOCAL
 	},
 	function (access_token, refresh_token, _expires_in, profile, done) {
-
-		User.findOne({ 'spotify_id': profile.id }, function (err, user) {
+		// una volta settati clientID, clientSecret ecc. della passport strategy viene chiamata la
+		// callback a cui viene passato access token, refresh token ecc.
+		User.findOne({ 'spotify_id': profile.id }, function (err, user) { // mongoose
 			if (err) {
 				return done(err);
 			}
@@ -65,6 +66,7 @@ refresh.use(strategy);
 router.get('/login', passport.authenticate('spotify', { scope: SPOTIFY_SCOPE, session: true }));
 
 router.get('/auth/callback', passport.authenticate('spotify', { failureRedirect: '/', session: true }), function (req, res) {
+	// genera una nuova sessione, a causa di vulnerabilità
 	let prevSession = req.session;
 	req.session.regenerate(() => {
 		Object.assign(req.session, prevSession);
