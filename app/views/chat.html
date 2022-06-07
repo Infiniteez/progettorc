@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/chat.css" rel="stylesheet">
+	<link href="/css/style.css" rel="stylesheet">
+	<script src="/js/bootstrap.bundle.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+		integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+	<script src="/socket.io/socket.io.min.js"></script>
+	<script src="/js/clientchat.js"></script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12 bg-white">
+				<div class="chat-message">
+					<ul class="chat chat-feed">
+					</ul>
+				</div>
+				<form id="chatForm" method="post" class="chat-box bg-white">
+					<div class="input-group">
+						<input id="message" name="message" class="form-control border no-shadow no-rounded"
+							placeholder="Scrivi un messaggio...">
+						<button class="btn btn-spotify no-rounded" type="submit">Invio</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

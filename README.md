@@ -1,6 +1,6 @@
-# TODO: aggiungere titolo progetto
+# Daily Trip Enhancer
 ## Scopo del progetto
-TODO: aggiungere scopo del progetto
+Stanco del solito viaggio giornaliero da/verso la scuola o il lavoro? Con Daily Trip Enhancer potrai mettere fine alla noia con una playlist personalizzata per  , e magari conoscere nuov
 ## Architettura di riferimento
 ![Architettura](architettura.png)
 ## Tecnologie usate
@@ -12,11 +12,14 @@ Costruisce ed avvia la seguente architettura
 - *Gestione del traffico*: reverse proxy (con load balancing)
 - Server per i file statici (css, fonts, scripts)
 #### [Node.js](https://nodejs.org/)
+- 3 istanze
 - Librerie utilizzate per SERV: **express** (HTTP), **passport** (OAuth)
 - Librerie utilizzate per i test: **mocha** con assertion library **chai**
 #### [MongoDB](https://www.mongodb.com/)
 - Sessioni degli utenti
 - Memorizzazione token OAuth degli utenti
+#### [RabbitMQ](https://www.rabbitmq.com/)
+- Garantisce la sincronizzazione della chat su tutte le istanze dell'app
 ### [GitHub Actions](https://github.com/features/actions)
 CI/CD, vengono effettuati i test con Mocha dopo ogni push
 
@@ -31,6 +34,8 @@ CI/CD, vengono effettuati i test con Mocha dopo ogni push
 TODO: aggiungere con apidoc
 ## Installazione
 ```console
+git clone https://github.com/Infiniteez/progettorc.git
+cd progettorc
 docker compose build
 ```
 ## Avvio
@@ -39,6 +44,6 @@ docker compose up
 ```
 ## Test
 ```console
-npm install
-npm test
+cd app
+npm install && npm test
 ```

@@ -2,30 +2,25 @@ extends layout
 
 block content
 	h1= title
-	p Istanza: #{instance}
+	small Il load balancer ti ha assegnato all'istanza #{instance}, che sarà felice di servirti!
+	br
+	br
 	if !user
 		a(href="/login" class="btn btn-spotify")
 			i.bi.bi-spotify
 			|  Login con Spotify
 	else
 		h2 Ciao, #{user.spotify_id}
-		p access_token:
-			pre #{user.access_token}
-		p refresh_token:
-			pre #{user.refresh_token}
-		p La tua email è #{user.email}
+		h6 (#{user.email})
+		br
 		a(href="/account" class="btn btn-spotify") Ottieni
-	hr
-	h2 Inserisci il codice postale
-	div(class="")
+		hr
+		h2 Inserisci il codice postale
 		form(action='../getCoordinates', method="POST")
 			label(for="partenza") Partenza
-			input(type='text', name='partenza', value="00195")
+			input(type='text', class="form-control text-center" name='partenza', value="00195")
 			br
 			label(for="destinazione") Destinazione
-			input(type="text", name='destinazione', value="00022")
+			input(type="text", class="form-control text-center" name='destinazione', value="00022")
 			br
-			input(type="submit")
-		
-
-	
+			input(type="submit", class="btn btn-spotify", value="Calcola")
