@@ -13,20 +13,13 @@ const authRouter = require('./routes/auth'),
 	sessionstore = require('sessionstore');
 
 const http = require('http');
-const WebSocket = require('ws');
+
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const io = require('socket.io')(server);
+const amqp = require('amqplib/callback_api');
 
-wss.on('connection', function connection(ws) {
-	ws.on('message', function incoming(data) {
-		wss.clients.forEach(function each(client) {
-			if (client !== ws && client.readyState === WebSocket.OPEN) {
-				client.send(data);
-			}
-		});
-	});
-});
+
 app.disable('x-powered-by');
 app.enable('trust proxy');
 app.set('views', path.join(__dirname, 'views'));
@@ -50,12 +43,47 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/', authRouter);
 
-app.get('/chat', function (req, res) {
-	res.sendFile(__dirname + '/index.html');
+app.get('/chat', authRouter.ensureAuthenticated, function (req, res) {
+	res.sendFile(path.join(__dirname, 'views', 'chat.html'));
+});
+
+app.post('/api/chat', authRouter.ensureAuthenticated, function (req) {
+	amqp.connect('amqp://rabbitmq:5672', function (err, conn) {
+		conn.createChannel(function (err, ch) {
+			if (err) {
+				throw new Error(err);
+			}
+			var ex = 'chat_ex';
+			var payload = JSON.stringify({ name: req.user.spotify_id, message: req.body.message });
+			ch.assertExchange(ex, 'fanout', { durable: false });
+			ch.publish(ex, '', Buffer.from(payload), { persistent: false });
+			ch.close(function () { conn.close(); });
+		});
+	});
 });
 
 if (process.env.NODE_ENV === 'test') {
-	module.exports = app;
+	module.exports = server;
 } else {
+	var chat = io.of('/ciao');
+	amqp.connect('amqp://rabbitmq:5672', function (err, conn) {
+		conn.createChannel(function (err, ch) {
+			if (err) {
+				throw new Error(err);
+			}
+			var ex = 'chat_ex';
+
+			ch.assertExchange(ex, 'fanout', { durable: false });
+			ch.assertQueue('', { exclusive: true }, function (err, q) {
+				if (err) {
+					throw new Error(err);
+				}
+				ch.bindQueue(q.queue, ex, '');
+				ch.consume(q.que, function (msg) {
+					chat.emit('chat', msg.content.toString());
+				});
+			}, { noAck: true });
+		});
+	});
 	server.listen(process.env.PORT || DEFAULT_PORT);
 }
