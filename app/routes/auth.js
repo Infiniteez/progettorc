@@ -14,11 +14,13 @@ const router = express.Router();
 
 
 passport.serializeUser((user, done) => {
-	done(null, user._id);
+	done(null, user.spotify_id);
 });
 
-passport.deserializeUser((_id, done) => {
-	User.findById(_id, (err, user) => {
+passport.deserializeUser((_id, done) => { 
+	User.findOne({
+		spotify_id: _id
+	}, (err, user) => {
 		if (err) {
 			done(null, false, { error: err });
 		} else {

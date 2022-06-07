@@ -1,3 +1,4 @@
+const { response } = require('express');
 
 const ensureAuthenticated = require('./auth').ensureAuthenticated,
 	getNewAccessToken = require('./auth').getNewAccessToken,
@@ -101,77 +102,107 @@ function make_get_request(url, user, ok, ko) {
 /* ------------------------ CALCOLO DELLE COORDINATE --------------*/
 /* CAP --> Coordinate */
 
-router.post('/getCoordinates', function (req, res) {
-	let partenza = req.body.partenza;
-	let destinazione = req.body.destinazione;
+router.post('/getCoordinates', function (req1, res1) {
+	let partenza = req1.body.partenza;
+	let destinazione = req1.body.destinazione;
+	let mezzo_trasporto = req1.body.mezzo;
 
-	let options1 = { // richiesta coordinate partenza
-		url: 'http://api.zippopotam.us/it/' + partenza,
-		json: true
-	};
-	let options2 = { // richiesta coordinate destinazione
-		url: 'http://api.zippopotam.us/it/' + destinazione,
-		json: true
-	};
-
-	request.get(options1, function (error1, response1) {
-		if (!error1 && response1.statusCode === 200) { // richiesta andata a buon fine
-			console.log(response1);
-			let long1 = response1.body.places[0].longitude;
-			let lat1 = response1.body.places[0].latitude;
-
-			// richiesta coordinate di destinazione
-			request.get(options2, function (error2, response2) {
-				if (!error2 && response2.statusCode === 200) { // richiesta andata a buon fine
-					console.log(response2);
-					let long2 = response2.body.places[0].longitude;
-					let lat2 = response2.body.places[0].latitude;
-
-					res.render('coordinates', { // invio al browser la risposta
-						long1: long1,
-						lat1: lat1,
-						long2: long2,
-						lat2: lat2
-					});
-				}
-				else {
-					res.render('index');
-				}
-			});
-		}
-		else {
-			res.render('index');
-		}
-	});
+	request.get('/' + durata_viaggio + '/:cap_partenza/:cap_destinazione', function(req2, res2) {
+	}); 
 });
 
 // --------------------- API --------------------- //
 /**
- * @api {get} /durata_viaggio/:mezzo_trasporto/:cap_partenza/:cap_destinazione Durata stimata viaggio
+ * @api {get} /info_viaggio/:mezzo_trasporto/:cap_partenza/:cap_destinazione Durata stimata viaggio
  * @apiDescription Restituisce la durata stimata del viaggio tra cap_partenza e cap_destinazione con mezzo_trasporto
- * @apiParam mezzo_trasporto Mezzo di trasporto, può essere scelto fra: TODO
+ * @apiParam mezzo_trasporto Mezzo di trasporto, può essere scelto fra: 
  * @apiParam cap_partenza CAP di partenza
  * @apiParam cap_destinazione CAP di destinazione
  */
-router.get('/durata_viaggio/:mezzo_trasporto/:cap_partenza/:cap_destinazione', function (req, res) {
+
+router.get('/info_viaggio/:mezzo_trasporto/:cap_partenza/:cap_destinazione', function (req, res) {
 	let mezzo_trasporto = req.params.mezzo_trasporto;
 	let cap_partenza = req.params.cap_partenza;
 	let cap_destinazione = req.params.cap_destinazione;
 
+	let options1 = { // richiesta coordinate partenza
+		url: 'http://api.zippopotam.us/it/' + cap_partenza,
+		json: true
+	};
+	let options2 = { // richiesta coordinate destinazione
+		url: 'http://api.zippopotam.us/it/' + cap_destinazione,
+		json: true
+	}; 
 
-	//TODO
+	request.get(options1, function (error1, response1) {
+		if (!error1 && response1.statusCode === 200) { // richiesta andata a buon fine
+			let long_start = response1.body.places[0].longitude;
+			let lat_start = response1.body.places[0].latitude;
 
-	let durata_ms = 100000;
+			// richiesta coordinate di destinazione
+			request.get(options2, function (error2, response2) {
+				if (!error2 && response2.statusCode === 200) { // richiesta andata a buon fine
+					let long_end = response2.body.places[0].longitude;
+					let lat_end = response2.body.places[0].latitude;
 
-	res.json({
-		error: null,
-		mezzo_trasporto: mezzo_trasporto,
-		cap_partenza: cap_partenza,
-		cap_destinazione: cap_destinazione,
-		durata_hhmmss: msToHHMMSS(durata_ms),
-		durata_ms: durata_ms
+					var coordinates = {
+						long_start: long_start,
+						lat_start: lat_start,
+						long_end: long_end,
+						lat_end: lat_end
+					};
+					
+					console.log(coordinates.lat_end); 
+					console.log(coordinates.long_start); 
+
+					let options3 = { // 
+						url: 'https://api.openrouteservice.org/v2/directions/' + mezzo_trasporto + '?api_key=' + process.env.API_KEY_ORS + '&start=' +  coordinates.long_start + ',' + coordinates.lat_start + '&end=' + coordinates.long_end + ',' + coordinates.lat_end,
+						json: true
+					};
+
+					console.log(options3.url); 
+					request.get(options3, function(error3, response3) {
+						console.log('----------------------------------------');  
+						console.log(response3)
+						console.log('----------------------------------------'); 
+						if (!error3 && response3.statusCode === 200) { // chiamata andata a buon fine
+							let distance = response3.body.features[0].properties.summary.distance; // distanza in metri
+							let duration = response3.body.features[0].properties.summary.duration; // durata in secondi
+							
+							// risposta finale
+							res.json({
+								error: null,
+								mezzo_trasporto: mezzo_trasporto,
+								cap_partenza: cap_partenza,
+								cap_destinazione: cap_destinazione,
+								durata_hhmmss: msToHHMMSS(duration * 1000),
+								durata_ms: duration,
+								distanza: distance
+							});
+						}
+						else{
+							res.json({
+								error: "Errore chiamata 3 OpenRootService"
+							}); 
+						}
+					}); 
+				}
+				else {
+					res.json({
+						error: "Errore chiamata 2 Zippopotamus"
+					}); 
+				}
+			});
+		}
+		else {
+			res.json({
+				error: "Errore chiamata numero 1 a Zippopotamus"
+			}); 
+		}
 	});
 });
+
+
 
 /**
  * @api {get} /distanza/:cap_partenza/:cap_destinazione Distanza fra due CAP
