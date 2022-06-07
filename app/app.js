@@ -2,15 +2,15 @@ const DEFAULT_PORT = '8080';
 
 require('dotenv').config();
 
-const authRouter = require('./routes/auth'),
-	indexRouter = require('./routes/index'),
+const
 	bodyParser = require('body-parser'),
 	cookieParser = require('cookie-parser'),
 	express = require('express'),
 	session = require('express-session'),
 	passport = require('passport'),
 	path = require('path'),
-	sessionstore = require('sessionstore');
+	sessionstore = require('sessionstore'),
+	isLoggedIn = require('./utils/isLoggedIn');
 
 const http = require('http');
 
@@ -40,14 +40,15 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/', indexRouter);
-app.use('/', authRouter);
+app.use('/', require('./routes/index'));
+if (process.env.NODE_ENV != 'test')
+	app.use('/', require('./routes/auth'));
 
-app.get('/chat', authRouter.ensureAuthenticated, function (req, res) {
+app.get('/chat', isLoggedIn, function (req, res) {
 	res.sendFile(path.join(__dirname, 'views', 'chat.html'));
 });
 
-app.post('/api/chat', authRouter.ensureAuthenticated, function (req) {
+app.post('/api/chat', isLoggedIn, function (req) {
 	amqp.connect('amqp://rabbitmq:5672', function (err, conn) {
 		conn.createChannel(function (err, ch) {
 			if (err) {

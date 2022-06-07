@@ -17,7 +17,7 @@ passport.serializeUser((user, done) => {
 	done(null, user.spotify_id);
 });
 
-passport.deserializeUser((_id, done) => { 
+passport.deserializeUser((_id, done) => {
 	User.findOne({
 		spotify_id: _id
 	}, (err, user) => {
@@ -92,12 +92,4 @@ module.exports.getNewAccessToken = function (user, callback) {
 		user.save();
 		callback();
 	});
-};
-
-module.exports.ensureAuthenticated = function (req, res, next) {
-	if (req.isAuthenticated()) {
-		return next();
-	}
-	req.session.returnTo = req.originalUrl;
-	res.redirect('/login');
 };
