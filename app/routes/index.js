@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
 	const INSTANCE = process.env.INSTANCE || 'node';
 	res.render('index', {
-		title: 'Docker with Nginx and Express',
+		title: 'Daily Trip Enhancer',
 		instance: INSTANCE,
 		user: req.user
 	});
@@ -26,11 +26,7 @@ router.get('/test', function (req, res) {
 	res.status(200).json('Funziona');
 });
 
-/* account */
-/**
- * @api {get} /user/:id Get user info
- * @apiParam id Users unique ID
- */
+
 router.get('/account', ensureAuthenticated, function (req, res) {
 	make_get_request(
 		'https://api.spotify.com/v1/me/top/artists?' +
@@ -100,29 +96,6 @@ function make_get_request(url, user, ok, ko) {
 	});
 }
 
-/*
-function msToHHMMSS(ms) {
-	// 1- Convert to seconds:
-	var seconds = ms / 1000;
-
-	// 2- Extract hours:
-	var hours = parseInt(seconds / 3600); // 3600 seconds in 1 hour
-	seconds = parseInt(seconds % 3600); // extract the remaining seconds after extracting hours
-
-	// 3- Extract minutes:
-	var minutes = parseInt(seconds / 60); // 60 seconds in 1 minute
-
-	// 4- Keep only seconds not extracted to minutes:
-	seconds = parseInt(seconds % 60);
-
-	// 5 - Format so it shows a leading zero if needed
-	let hoursStr = ('00' + hours).slice(-2);
-	let minutesStr = ('00' + minutes).slice(-2);
-	let secondsStr = ('00' + seconds).slice(-2);
-
-	return hoursStr + ':' + minutesStr + ':' + secondsStr;
-}
-*/
 
 
 /* ------------------------ CALCOLO DELLE COORDINATE --------------*/
@@ -172,6 +145,72 @@ router.post('/getCoordinates', function (req, res) {
 	});
 });
 
+// --------------------- API --------------------- //
+/**
+ * @api {get} /durata_viaggio/:mezzo_trasporto/:cap_partenza/:cap_destinazione Durata stimata viaggio
+ * @apiDescription Restituisce la durata stimata del viaggio tra cap_partenza e cap_destinazione con mezzo_trasporto
+ * @apiParam mezzo_trasporto Mezzo di trasporto, può essere scelto fra: TODO
+ * @apiParam cap_partenza CAP di partenza
+ * @apiParam cap_destinazione CAP di destinazione
+ */
+router.get('/durata_viaggio/:mezzo_trasporto/:cap_partenza/:cap_destinazione', function (req, res) {
+	let mezzo_trasporto = req.params.mezzo_trasporto;
+	let cap_partenza = req.params.cap_partenza;
+	let cap_destinazione = req.params.cap_destinazione;
+
+
+	//TODO
+
+	let durata_ms = 100000;
+
+	res.json({
+		error: null,
+		mezzo_trasporto: mezzo_trasporto,
+		cap_partenza: cap_partenza,
+		cap_destinazione: cap_destinazione,
+		durata_hhmmss: msToHHMMSS(durata_ms),
+		durata_ms: durata_ms
+	});
+});
+
+/**
+ * @api {get} /distanza/:cap_partenza/:cap_destinazione Distanza fra due CAP
+ * @apiDescription Restituisce la distanza in linea d'aria stimata tra cap_partenza e cap_destinazione
+ * @apiParam cap_partenza CAP di partenza
+ * @apiParam cap_destinazione CAP di destinazione
+ */
+router.get('/distanza/:cap_partenza/:cap_destinazione', function (req, res) {
+	let cap_partenza = req.params.cap_partenza;
+	let cap_destinazione = req.params.cap_destinazione;
+	//TODO
+	let distanza_m = 10000;
+	res.json({ error: null, cap_partenza: cap_partenza, cap_destinazione: cap_destinazione, distanza_m: distanza_m });
+});
+
+
+
+// --------------------- AUSILIARIE --------------------- //
+function msToHHMMSS(ms) {
+	// 1- Convert to seconds:
+	var seconds = ms / 1000;
+
+	// 2- Extract hours:
+	var hours = parseInt(seconds / 3600); // 3600 seconds in 1 hour
+	seconds = parseInt(seconds % 3600); // extract the remaining seconds after extracting hours
+
+	// 3- Extract minutes:
+	var minutes = parseInt(seconds / 60); // 60 seconds in 1 minute
+
+	// 4- Keep only seconds not extracted to minutes:
+	seconds = parseInt(seconds % 60);
+
+	// 5 - Format so it shows a leading zero if needed
+	let hoursStr = ('00' + hours).slice(-2);
+	let minutesStr = ('00' + minutes).slice(-2);
+	let secondsStr = ('00' + seconds).slice(-2);
+
+	return hoursStr + ':' + minutesStr + ':' + secondsStr;
+}
 
 
 module.exports = router;
