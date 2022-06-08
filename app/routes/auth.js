@@ -1,4 +1,4 @@
-const SPOTIFY_SCOPE = ['user-read-private', 'user-read-email', 'user-top-read'];
+const SPOTIFY_SCOPE = ['user-read-private', 'user-read-email', 'user-top-read', 'playlist-modify-private'];
 
 require('dotenv').config();
 require('../config/database');

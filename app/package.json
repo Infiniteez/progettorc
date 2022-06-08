@@ -1,7 +1,7 @@
 {
-	"name": "progettorc",
+	"name": "dailytripenhancer",
 	"version": "1.0.0",
-	"description": "Progetto per l'esame di Reti di Calcolatori",
+	"description": "Daily Trip Enhancer",
 	"author": "Andrea Macaro e Gianluca Gambilonghi",
 	"homepage": "https://github.com/infiniteez/progettorc#readme",
 	"keywords": [
@@ -14,10 +14,7 @@
 		"round-robin",
 		"live-reload"
 	],
-	"main": "src/index.js",
-	"files": [
-		"src"
-	],
+	"main": "app.js",
 	"scripts": {
 		"start": "nodemon -L app.js",
 		"test": "NODE_ENV=test mocha --exit"
@@ -56,7 +53,6 @@
 	"apidoc": {
 		"title": "Documentazione API di Daily Trip Enhancer",
 		"url": "https://localhost/api"
-
 	},
 	"private": true,
 	"license": "MIT"
