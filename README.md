@@ -1,6 +1,6 @@
 # Daily Trip Enhancer
 ## Scopo del progetto
-Stanco del solito viaggio giornaliero da/verso la scuola o il lavoro? Con Daily Trip Enhancer potrai mettere fine alla noia con una playlist personalizzata per  , e magari conoscere nuov
+Stanco del solito viaggio giornaliero da/verso la scuola o il lavoro? Con Daily Trip Enhancer potrai mettere fine alla noia con una playlist personalizzata e dalla durata perfetta per ogni tuo viaggio, e se ti sposti con i mezzi pubblici o a piedi potrai anche fare nuove amicizie attraverso la chat!
 ## Architettura di riferimento
 ![Architettura](architettura.png)
 ## Tecnologie usate
@@ -13,15 +13,17 @@ Costruisce ed avvia la seguente architettura
 - Server per i file statici (css, fonts, scripts)
 #### [Node.js](https://nodejs.org/)
 - 3 istanze
-- Librerie utilizzate per SERV: **express** (HTTP), **passport** (OAuth)
+- Librerie utilizzate per SERV: **express** (HTTP), **passport** (OAuth), **socket.io** (WebSocket)
 - Librerie utilizzate per i test: **mocha** con assertion library **chai**
 #### [MongoDB](https://www.mongodb.com/)
 - Sessioni degli utenti
 - Memorizzazione token OAuth degli utenti
 #### [RabbitMQ](https://www.rabbitmq.com/)
-- Garantisce la sincronizzazione della chat su tutte le istanze dell'app
+- Le WebSocket, girando sulle 3 diverse istanze dell'app, non sono sincronizzate
+- RabbitMQ garantisce la sincronizzazione delle WebSocket, e quindi della chat
+- Per la comunicazione si utilizza il protocollo AMQP
 ### [GitHub Actions](https://github.com/features/actions)
-CI/CD, vengono effettuati i test con Mocha dopo ogni push
+CI/CD, vengono effettuati i test con Mocha dopo ogni push o pull request in master
 
 ## Servizi REST
 ### Utilizzati da *SERV*

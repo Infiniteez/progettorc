@@ -41,8 +41,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', require('./routes/index'));
+app.use('/api', require('./routes/api'));
 if (process.env.NODE_ENV != 'test')
 	app.use('/', require('./routes/auth'));
+
+
+
 
 app.get('/chat', isLoggedIn, function (req, res) {
 	res.sendFile(path.join(__dirname, 'views', 'chat.html'));
