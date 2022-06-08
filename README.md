@@ -19,8 +19,8 @@ Costruisce ed avvia la seguente architettura
 - Sessioni degli utenti
 - Memorizzazione token OAuth degli utenti
 #### [RabbitMQ](https://www.rabbitmq.com/)
-- Le WebSocket, girando sulle 3 diverse istanze dell'app, non sono sincronizzate
-- RabbitMQ garantisce la sincronizzazione delle WebSocket, e quindi della chat
+- Le WebSocket che girano sulle 3 diverse istanze dell'app non sono sincronizzate fra loro
+- RabbitMQ garantisce la sincronizzazione delle WebSocket, e quindi della chat su tutti i nodi
 - Per la comunicazione si utilizza il protocollo AMQP
 ### [GitHub Actions](https://github.com/features/actions)
 CI/CD, vengono effettuati i test con Mocha dopo ogni push o pull request in master
@@ -33,7 +33,10 @@ CI/CD, vengono effettuati i test con Mocha dopo ogni push o pull request in mast
 - [zippopotam.us](https://www.zippopotam.us/)
 - [Openrouteservice](https://openrouteservice.org/)
 ### Offerti da *SERV*
-TODO: aggiungere con apidoc
+- Distanza fra due CAP con il mezzo di trasporto specificato
+- Durata del viaggio fra due CAP con il mezzo di trasporto specificato
+
+La documentazione delle API è disponibile qui: [Documentazione apidoc](https://infiniteez.github.io/progettorc/app/doc/)
 ## Installazione
 ```console
 git clone https://github.com/Infiniteez/progettorc.git

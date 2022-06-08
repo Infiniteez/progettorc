@@ -1,0 +1,23 @@
+doctype html
+head
+	meta(charset='UTF-8')
+	meta(http-equiv='X-UA-Compatible' content='IE=edge')
+	meta(name='viewport' content='width=device-width, initial-scale=1.0')
+	title ChatRoom | Daily Trip Enhancer
+	link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet')
+	link(href='/css/bootstrap.min.css' rel='stylesheet')
+	link(href='/css/chat.css' rel='stylesheet')
+	link(href='/css/style.css' rel='stylesheet')
+	script(src='/js/bootstrap.bundle.min.js')
+	script(src='https://code.jquery.com/jquery-3.6.0.min.js' integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=' crossorigin='anonymous')
+	script(src='/socket.io/socket.io.min.js')
+	script(src='/js/clientchat.js')
+.container
+	.row
+		.col-12.bg-white
+			.chat-message
+				ul.chat.chat-feed
+			form#chatForm.chat-box.bg-white(method='post')
+				.input-group
+					input#message.form-control.border.no-shadow.no-rounded(name='message' placeholder='Scrivi un messaggio...')
+					button.btn.btn-spotify.no-rounded(type='submit') Invio

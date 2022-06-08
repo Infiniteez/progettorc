@@ -12,15 +12,21 @@ block content
 	else
 		h2 Ciao, #{user.spotify_id}
 		h6 (#{user.email})
-		br
-		a(href="/account" class="btn btn-spotify") Ottieni
 		hr
-		h2 Inserisci il codice postale
-		form(action='../getCoordinates', method="POST")
+		h2 Dettagli del viaggio
+		form(action='/mainFunc', method="POST")
+			label(for='mezzo') Mezzo di trasporto 
+			select#mezzo(name="mezzo" class="form-select text-center")
+				option(value="driving-car" selected) Automobile
+				option(value="foot-walking") A piedi 
+				option(value="cycling-regular") Bicicletta
+				option(value="cycling-electric") Bici elettrica
+				option(value="wheelchair") Sedia a rotelle
+			br
 			label(for="partenza") Partenza
-			input(type='text', class="form-control text-center" name='partenza', value="00195")
+			input(type='text', class="form-control text-center" name='partenza', value="00195", maxlength=5, size=5)
 			br
 			label(for="destinazione") Destinazione
-			input(type="text", class="form-control text-center" name='destinazione', value="00022")
+			input(type="text", class="form-control text-center" name='destinazione', value="00022", maxlength=5, size=5)
 			br
 			input(type="submit", class="btn btn-spotify", value="Calcola")
