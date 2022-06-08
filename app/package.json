@@ -53,6 +53,11 @@
 		"mocha": "^10.0.0",
 		"nodemon": "^2.0.16"
 	},
+	"apidoc": {
+		"title": "Documentazione API di Daily Trip Enhancer",
+		"url": "https://localhost/api"
+
+	},
 	"private": true,
 	"license": "MIT"
 }

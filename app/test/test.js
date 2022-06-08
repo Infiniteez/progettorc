@@ -29,3 +29,16 @@ describe('Test dell\'applicazione', () => {
 			});
 	});
 });
+
+describe('Test delle API dell\'applicazione', () => {
+	it('Endpoint /api dovrebbe restituire 200 OK con body { api_working: true }', (done) => {
+		chai.request(app)
+			.get('/api')
+			.end((err, res) => {
+				res.should.have.status(200);
+				res.should.have.property('body');
+				res.body.should.be.equal(JSON.stringify({ api_working: true }));
+				done();
+			});
+	});
+});
