@@ -45,13 +45,6 @@ app.use('/api', require('./routes/api'));
 if (process.env.NODE_ENV != 'test')
 	app.use('/', require('./routes/auth'));
 
-
-
-
-app.get('/chat', isLoggedIn, function (req, res) {
-	res.sendFile(path.join(__dirname, 'views', 'chat.html'));
-});
-
 app.post('/api/chat', isLoggedIn, function (req) {
 	amqp.connect('amqp://rabbitmq:5672', function (err, conn) {
 		conn.createChannel(function (err, ch) {

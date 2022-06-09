@@ -25,7 +25,7 @@ router.get('/test', function (req, res) {
 	res.status(200).json('Funziona');
 });
 
-router.get('/chat', function (req, res) {
+router.get('/chat', isLoggedIn, function (req, res) {
 	res.render('chat');
 });
 
@@ -137,7 +137,7 @@ function make_get_request(url, user, ok) {
 		}
 		else if (!error && response.statusCode === 401) { // token scaduto
 			getNewAccessToken(user, function () {
-				options.headers.Authorization = 'Bearer ' + user.access_token; // aggiorno il token
+				options.headers.Authorization = 'Bearer ' + user.access_token; // aggiorno il token nell'header
 				request.get(options, function (error, response, body) { // riprovo la richiesta
 					if (!error && response.statusCode === 200) {
 						ok(body);
