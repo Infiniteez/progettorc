@@ -6,6 +6,7 @@ block content
 	br
 	h4 Ho stimato che il viaggio con il mezzo da te specificato da #{partenza} a #{destinazione} durerà all'incirca #{target_duration}
 	h6 Ecco la playlist generata per il viaggio in base ai tuoi interessi, #{spotify_id}! Dura esattamente #{current_duration}!
+	iframe(style='border-radius:12px' src=`https://open.spotify.com/embed/playlist/${playlist_id}?utm_source=generator` width='100%' height='380' frameborder='0' allowfullscreen='' allow='autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture')
 
 	if mezzo_trasporto !== 'driving-car'
 		h6 Dato che non sarai alla guida, puoi conoscere pendolari come te attraverso la chat!

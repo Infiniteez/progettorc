@@ -107,7 +107,8 @@ router.post('/mainFunc', isLoggedIn, function (req, res) {
 													partenza: partenza,
 													destinazione: destinazione,
 													spotify_id: req.user.spotify_id,
-													mezzo_trasporto: mezzo_trasporto
+													mezzo_trasporto: mezzo_trasporto,
+													playlist_id: playlist_id
 												});
 											}
 										);
